@@ -18,10 +18,13 @@ export default function NoteDetailsClient() {
     refetchOnMount: false,
   });
 
+  /* повідомлення про завантаження */
+  if (isLoading) {
+    return <p>Loading, please wait...</p>;
+  }
+
   return (
     <div className={css.container}>
-      {/* повідомлення про завантаження */}
-      {isLoading && <p>Loading, please wait...</p>}
       {/* повідомлення про помилку */}
       {(isError || !note) && <p>Something went wrong.</p>}
       {/* в разі успішного запиту */}
