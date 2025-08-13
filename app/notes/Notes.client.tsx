@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import css from './NotesPage.module.css';
 import NoteList from '@/components/NoteList/NoteList';
-import { fetchNotes } from '@/lib/api';
+import { fetchNotes, NotesHttpResponse } from '@/lib/api';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import Pagination from '@/components/Pagination/Pagination';
 import Modal from '@/components/Modal/Modal';
@@ -10,7 +10,11 @@ import NoteForm from '@/components/NoteForm/NoteForm';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import { useDebouncedCallback } from 'use-debounce';
 
-function NotesPageClient() {
+interface NotesPageClientProps {
+  initialData: NotesHttpResponse;
+}
+
+function NotesPageClient({ initialData }: NotesPageClientProps) {
   // стани
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +24,7 @@ function NotesPageClient() {
     queryKey: ['notes', query, currentPage],
     queryFn: () => fetchNotes(query, currentPage),
     placeholderData: keepPreviousData,
+    initialData: initialData,
   });
 
   const totalPages = data?.totalPages ?? 0;
